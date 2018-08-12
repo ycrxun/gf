@@ -64,12 +64,12 @@ func createGrpcServer(service *Service) error {
 
 	server := grpc.NewServer(
 		grpc.UnaryInterceptor(
-			grpc_middleware.ChainUnaryServer(service.UnaryInts...)),
+			grpc_middleware.ChainUnaryServer(service.UnaryInterceptors...)),
 		grpc.StreamInterceptor(
-			grpc_middleware.ChainStreamServer(service.StreamInts...)),
+			grpc_middleware.ChainStreamServer(service.StreamInterceptors...)),
 	)
 
-	service.GRPCImplementation(server)
+	service.GRPCServer(server)
 
 	grpc_prometheus.EnableHandlingTimeHistogram(
 		func(opt *prometheus.HistogramOpts) {

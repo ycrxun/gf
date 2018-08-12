@@ -12,7 +12,7 @@ const (
 	Consul Provider = iota
 )
 
-// Config
+// Config for Registry
 type Config struct {
 	Provider Provider
 	Host     string
@@ -25,12 +25,12 @@ type Registry interface {
 	DeRegister(string) error
 }
 
-// NewRegistry for
+// NewRegistry returns Registry via provider, e.g. ConsulRegistry
 func NewRegistry(cfg Config) (Registry, error) {
 	switch cfg.Provider {
 	case Consul:
 		return NewConsulRegistry(cfg)
 	default:
-		return nil, fmt.Errorf("Unsupported registry provider: %v", provider)
+		return nil, fmt.Errorf("Unsupported registry provider: %v", cfg.Provider)
 	}
 }

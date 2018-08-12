@@ -32,7 +32,7 @@ type Service struct {
 	UnaryInterceptors  []grpc.UnaryServerInterceptor
 	StreamInterceptors []grpc.StreamServerInterceptor
 	// The RPC server implementation
-	GRPCFunc func(*grpc.Server)
+	GRPCServer func(*grpc.Server)
 	// Tracing
 	Tracer opentracing.Tracer
 	//Registry
@@ -52,7 +52,7 @@ func defaultOptions(n string) *Service {
 	return &Service{
 		ID:             generateID(n),
 		Name:           n,
-		GRPCFunc:       func(s *grpc.Server) {},
+		GRPCServer:     func(s *grpc.Server) {},
 		ServiceAdrr:    Addr{Host: "0.0.0.0", Port: 9100},
 		PrometheusAdrr: Addr{Host: "0.0.0.0", Port: 9000},
 	}
@@ -73,9 +73,9 @@ func (service *Service) UsePrometheusAdrr(addr Addr) {
 	service.PrometheusAdrr = addr
 }
 
-// GRPCImplementation for GRPCFunc
+// GRPCImplementation for GRPCServer
 func (service *Service) GRPCImplementation(r func(*grpc.Server)) {
-	service.GRPCFunc = r
+	service.GRPCServer = r
 }
 
 // UseTracer to set tracer

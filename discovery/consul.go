@@ -9,8 +9,8 @@ import (
 	"google.golang.org/grpc"
 )
 
-// ConsulDiscovery provider
-type ConsulDiscovery struct {
+// discovery provider
+type discovery struct {
 	*api.Client
 	dialopts []grpc.DialOption
 }
@@ -34,11 +34,11 @@ func NewConsulDiscovery(cfg Config) (Discovery, error) {
 		opts = append(opts, grpc.WithStreamInterceptor(otgrpc.OpenTracingStreamClientInterceptor(cfg.Tracer)))
 	}
 
-	return ConsulDiscovery{c, opts}, nil
+	return discovery{c, opts}, nil
 }
 
 // Dial grpc server
-func (c ConsulDiscovery) Dial(name string, opts ...grpc.DialOption) (*grpc.ClientConn, error) {
+func (c discovery) Dial(name string, opts ...grpc.DialOption) (*grpc.ClientConn, error) {
 	r, err := lb.NewResolver(c.Client, name, "")
 
 	if err != nil {
